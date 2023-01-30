@@ -54,6 +54,10 @@ public class TeamView {
         System.out.println("-----------------------开发团队调度软件----------------------");
         System.out.println(TITTLE);
         Employee[] employees = listSvc.getAllEmployees();
+        if(employees == null || employees.length == 0){
+            System.out.println("公司中没有任何成员信息");
+        }
+
         for(int i =0; i<employees.length;i++){
             System.out.println(employees[i]);
         }
