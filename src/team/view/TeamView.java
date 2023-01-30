@@ -13,7 +13,7 @@ public class TeamView {
     private Employee[] employees;
 
     //主界面显示及控制方法
-    public void enterMainMenu() throws TeamException {
+    public void enterMainMenu() {
         boolean isFlag = true;
 
         listAllEmployees();
@@ -54,10 +54,6 @@ public class TeamView {
         System.out.println("-----------------------开发团队调度软件----------------------");
         System.out.println(TITTLE);
         Employee[] employees = listSvc.getAllEmployees();
-        if(employees == null || employees.length == 0){
-            System.out.println("公司中没有任何成员信息");
-        }
-
         for(int i =0; i<employees.length;i++){
             System.out.println(employees[i]);
         }
@@ -71,6 +67,7 @@ public class TeamView {
         if(currentTeam.length == 0){
             System.out.println("开发团队目前没有成员");
         }else{
+            System.out.println("TID/"+TITTLE);
             for(int i = 0; i<currentTeam.length;i++){
                 //i+1表示tid
                 System.out.println(currentTeam[i].getMemberId()+"/"+currentTeam[i].toString());
@@ -80,28 +77,36 @@ public class TeamView {
     }
 
     //实现添加成员操作
-    public void addMember() throws TeamException {
+    public void addMember() {
         System.out.println("---------------------添加成员---------------------\n" +
                 "请输入要添加的员工ID：");
         int num = TSUtility.readInt(); //获取你要加入的团队成员id
         employees = listSvc.getAllEmployees();
         for(int i=0;i<employees.length;i++){
             if(employees[i].getId() == num){
-                teamSvc.addMember(employees[i]);
+                try {
+                    teamSvc.addMember(employees[i]);
+                } catch (TeamException e) {
+                    System.out.println("失败原因："+e.getMessage());
+                }
             }
         }
         System.out.println("添加成功");
         TSUtility.readReturn();
     }
     //实现删除成员操作
-    public void deleteMember() throws TeamException {
+    public void deleteMember()  {
         System.out.print("---------------------删除成员---------------------\n" +
                 "请输入要删除员工的TID：");
         int tId = TSUtility.readInt();
         System.out.print("确认是否删除(Y/N)：");
         char delete = TSUtility.readConfirmSelection();
         if(delete == 'Y'){
-            teamSvc.removeMember(tId);
+            try {
+                teamSvc.removeMember(tId);
+            } catch (TeamException e) {
+                System.out.println("失败原因："+e.getMessage());
+            }
             System.out.println("删除成功");
         }else if(delete == 'N'){
             System.out.println("取消删除");
@@ -112,10 +117,6 @@ public class TeamView {
 
     public static void main(String[] args) {
         TeamView teamView = new TeamView();
-        try {
-            teamView.enterMainMenu();
-        } catch (TeamException e) {
-            System.out.println(e.getMessage());
-        }
+        teamView.enterMainMenu();
     }
 }
